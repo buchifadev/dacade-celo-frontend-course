@@ -1,5 +1,7 @@
 import Blockies from 'react-blockies';
 import { ethers } from 'ethers';
+
+// Returns an identicon for the given address
 export const identiconTemplate = (address : string) => {
     return <Blockies size={10} 
     scale={4} 
@@ -8,6 +10,7 @@ export const identiconTemplate = (address : string) => {
     />
 }
 
+// Reduce the length of a given address
 export const shortenAddress = (address: string) => {
     const shortAddress = address.slice(0, 5) + "..." + address.slice(address.length - 4, address.length);
     if (!address) {
@@ -17,6 +20,7 @@ export const shortenAddress = (address: string) => {
     }
 }
 
+// Convert the given amount from ether (10^18) to wei
 export const amountFromEther = (etherAmount: number) => {
     const amount = ethers.utils.formatEther(
         etherAmount.toString()
@@ -24,6 +28,7 @@ export const amountFromEther = (etherAmount: number) => {
     return amount;
 }
 
+// Convert the give amount from wei to ether
 export const amountToEther = (amount: number) => {
     const etherAmount = ethers.utils.parseEther(
         amount.toString()
