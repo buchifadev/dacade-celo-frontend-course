@@ -163,13 +163,22 @@ const Product = ({ id, setError, setLoading, clear }: any) => {
             </div>
 
             {/* Buy button that calls the purchaseProduct function on click */}
-            <button
+            {product.owner == address ? 
+               (<button
+               disabled
+               className="mt-4 h-14 w-full border-[1px] border-gray-500 text-black p-2 rounded-lg hover:bg-gray-200 hover:text-white"
+             >
+               {/* */}
+               You can't buy your own product
+             </button>):
+              (<button
               onClick={purchaseProduct}
               className="mt-4 h-14 w-full border-[1px] border-gray-500 text-black p-2 rounded-lg hover:bg-black hover:text-white"
             >
               {/* Show the product price in cUSD */}
               Buy for {productPriceFromWei} cUSD
-            </button>
+            </button>)
+            }
           </div>
         </div>
       </p>

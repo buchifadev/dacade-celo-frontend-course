@@ -1,19 +1,15 @@
 // This component is used to add a product to the marketplace and show the user's cUSD balance
 
 // Importing the dependencies
-import { useEffect, useState } from "react";
+import { useState } from "react";
 // import ethers to convert the product price to wei
 import { ethers } from "ethers";
-// Import the useAccount and useBalance hooks to get the user's address and balance
-import { useAccount, useBalance } from "wagmi";
 // Import the toast library to display notifications
 import { toast } from "react-toastify";
 // Import the useDebounce hook to debounce the input fields
 import { useDebounce } from "use-debounce";
 // Import our custom useContractSend hook to write a product to the marketplace contract
 import { useContractSend } from "@/hooks/contract/useContractWrite";
-// Import the erc20 contract abi to get the cUSD balance
-import erc20Instance from "../abi/erc20.json";
 
 // Define the AddProductModal component
 const AddProductModal = () => {
@@ -33,7 +29,6 @@ const AddProductModal = () => {
   const [debouncedProductDescription] = useDebounce(productDescription, 500);
   const [debouncedProductLocation] = useDebounce(productLocation, 500);
   const [loading, setLoading] = useState("");
-  const [displayBalance, setDisplayBalance] = useState(false);
 
   // Check if all the input fields are filled
   const isComplete =
@@ -102,22 +97,6 @@ const AddProductModal = () => {
       setLoading("");
     }
   };
-
-  // Get the user's address and balance
-  const { address, isConnected } = useAccount();
-  const { data: cusdBalance } = useBalance({
-    address,
-    token: erc20Instance.address as `0x${string}`,
-  });
-
-  // If the user is connected and has a balance, display the balance
-  useEffect(() => {
-    if (isConnected && cusdBalance) {
-      setDisplayBalance(true);
-      return;
-    }
-    setDisplayBalance(false);
-  }, [cusdBalance, isConnected]);
 
   // Define the JSX that will be rendered
   return (
@@ -231,17 +210,6 @@ const AddProductModal = () => {
           </div>
         )}
       </div>
-
-      {/* Display the user's cUSD balance */}
-      {displayBalance && (
-        <span
-          className="inline-block text-dark ml-4 px-6 py-2.5 font-medium text-md leading-tight rounded-2xl shadow-none "
-          data-bs-toggle="modal"
-          data-bs-target="#exampleModalCenter"
-        >
-          Balance: {Number(cusdBalance?.formatted || 0).toFixed(2)} cUSD
-        </span>
-      )}
     </div>
   );
 };
