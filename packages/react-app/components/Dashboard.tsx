@@ -4,9 +4,6 @@
 import { useState } from "react";
 import { ethers } from "ethers";
 import { useContractCall } from "@/hooks/contract/useContractRead";
-import ErrorAlert from "@/components/alerts/ErrorAlert";
-import LoadingAlert from "@/components/alerts/LoadingAlert";
-import SuccessAlert from "@/components/alerts/SuccessAlert";
 import { shortenAddress, identiconTemplate, amountFromEther } from "@/helpers";
 import Link from "next/link";
 
