@@ -35,3 +35,14 @@ export const amountToEther = (amount: number) => {
     );
     return etherAmount
 }
+
+export const checkUrl = (rawURL: string) => {
+    let givenURL ;
+    try {
+        givenURL = new URL (rawURL);
+    } catch (error) {
+        console.log ("error is", error);
+       return false; 
+    }
+    return true;
+  }

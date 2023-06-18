@@ -11,6 +11,8 @@ import { useDebounce } from "use-debounce";
 // Import our custom useContractSend hook to write a product to the marketplace contract
 import { useContractSend } from "@/hooks/contract/useContractWrite";
 
+import { checkUrl } from "@/helpers";
+
 // Define the AddProductModal component
 const AddProductModal = () => {
   // The visible state is used to toggle the visibility of the modal
@@ -29,14 +31,52 @@ const AddProductModal = () => {
   const [debouncedProductDescription] = useDebounce(productDescription, 500);
   const [debouncedProductLocation] = useDebounce(productLocation, 500);
   const [loading, setLoading] = useState("");
+  
 
-  // Check if all the input fields are filled
-  const isComplete =
-    productName &&
-    productPrice &&
-    productImage &&
-    productLocation &&
-    productDescription;
+  // Toast displayed for warning in the input form
+  const showInputAlertToast = (message: string) => {
+    toast.warn(message, {
+      position: "bottom-center",
+      autoClose: 8000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
+  }
+  
+  // Check if all the input form are filled
+  const isComplete = () => {
+    // Validate product name
+    if (productName.length < 2) {
+      showInputAlertToast("Product name should be 2 or more characters")
+      return false;
+    }
+    // Validate product price
+    if (Number(productPrice) < 1) {
+      showInputAlertToast("Product price should be greater than 0")
+      return false;
+    }
+    // Validate product image
+    if (!checkUrl(productImage)) {
+      showInputAlertToast("Product image URL should be a valid URL")
+      return false;
+    }
+    // Validate product image
+    if (productLocation.length < 2) {
+      showInputAlertToast("Product location should be greater than 2 characters")
+      return false;
+    }
+    // Validate product description
+    if (productDescription.split(" ").length < 2) {
+      showInputAlertToast("Product description should be 2 or more words")
+      return false;
+    }
+    // If all the input fields are valid, return true
+    return true
+  }
 
   // Clear the input fields after the product is added to the marketplace
   const clearForm = () => {
@@ -67,7 +107,7 @@ const AddProductModal = () => {
       throw "Failed to create product";
     }
     setLoading("Creating...");
-    if (!isComplete) throw new Error("Please fill all fields");
+    if (!isComplete()) throw new Error("Please fill all fields");
     // Create the product by calling the writeProduct function on the marketplace contract
     const purchaseTx = await createProduct();
     setLoading("Waiting for confirmation...");
@@ -136,6 +176,8 @@ const AddProductModal = () => {
                 >
                   {/* Input fields for the product */}
                   <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+
+                    {/* Product Name */}
                     <label>Product Name</label>
                     <input
                       onChange={(e) => {
@@ -145,7 +187,8 @@ const AddProductModal = () => {
                       type="text"
                       className="w-full bg-gray-100 p-2 mt-2 mb-3"
                     />
-
+                    
+                    {/* Product Image  */}
                     <label>Product Image (URL)</label>
                     <input
                       onChange={(e) => {
@@ -156,6 +199,7 @@ const AddProductModal = () => {
                       className="w-full bg-gray-100 p-2 mt-2 mb-3"
                     />
 
+                    {/* Product Description */}
                     <label>Product Description</label>
                     <input
                       onChange={(e) => {
@@ -166,6 +210,7 @@ const AddProductModal = () => {
                       className="w-full bg-gray-100 p-2 mt-2 mb-3"
                     />
 
+                    {/* Product Location */}
                     <label>Product Location</label>
                     <input
                       onChange={(e) => {
@@ -176,6 +221,7 @@ const AddProductModal = () => {
                       className="w-full bg-gray-100 p-2 mt-2 mb-3"
                     />
 
+                    {/* Product Price */}
                     <label>Product Price (cUSD)</label>
                     <input
                       onChange={(e) => {
