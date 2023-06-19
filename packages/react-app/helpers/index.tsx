@@ -36,6 +36,7 @@ export const amountToEther = (amount: number) => {
     return etherAmount
 }
 
+// Validate the given URL
 export const checkUrl = (rawURL: string) => {
     let givenURL ;
     try {
