@@ -169,7 +169,7 @@ const Product = ({ id, setError, setLoading, clear }: any) => {
                className="mt-4 h-14 w-full border-[1px] border-gray-500 text-black p-2 rounded-lg hover:bg-gray-200 hover:opacity-0"
              >
                {/* Change button text */}
-               You can't buy your own product
+               You cannot buy your own product
              </button>):
               (<button
               onClick={purchaseProduct}
