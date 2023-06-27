@@ -4,7 +4,9 @@ import { useAccount, useBalance } from "wagmi";
 
 import erc20Instance from "../abi/erc20.json";
 
+// This component displays the balance of the user
 const DisplayBalance = () => {
+    // Create state variables
     const [displayBalance, setDisplayBalance] = useState(false);
     const {address, isConnected} = useAccount();
     const {data: cusdBalance} = useBalance({
@@ -12,6 +14,7 @@ const DisplayBalance = () => {
         token: erc20Instance.address as `0x${string}`
     });
 
+    // Upate the balance when ever there is a change 
     useEffect(() => {
         if (isConnected && cusdBalance) {
             setDisplayBalance(true);
