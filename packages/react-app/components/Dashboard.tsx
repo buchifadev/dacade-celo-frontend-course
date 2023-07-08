@@ -8,6 +8,7 @@ import Link from "next/link";
 
 // Define the AddProductModal component
 const Dashboard = () => {
+    // Use the hooks to fetch data from the blockchain
     const {data: topSpender} = useContractCall("getTopSpender", [], true);
     const {data: topSpenderAmount} = useContractCall("getTopSpenderNumber", [topSpender], true);
     const {data: topBuyer} = useContractCall("getTopBuyer", [], true);
